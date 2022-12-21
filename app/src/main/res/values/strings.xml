@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">GLSurfaceViewDemo</string>
+    <string name="request_permission_sdcard">需要sdcard读权限.</string>
+</resources>
