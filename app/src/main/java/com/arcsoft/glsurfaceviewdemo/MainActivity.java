@@ -17,9 +17,11 @@ import android.app.AlertDialog;
 import android.util.Log;
 
 import com.arcsoft.glsurfaceviewdemo.gles.DisplaySurfaceView;
+import com.arcsoft.glsurfaceviewdemo.yuv_tool.YuvUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -79,17 +81,19 @@ public class MainActivity extends AppCompatActivity {
     }
     public void readFile() {
         Log.e(TAG, "read file");
-        File file = new File("/sdcard/123.NV21");
+        File file = new File("/sdcard/123.uyvy");
         if (file.canRead()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 int length = fileInputStream.available();
-                byte[] bytes = new byte[length];
-                fileInputStream.read(bytes);
+                byte[] uyvy_bytes = new byte[length];
+                fileInputStream.read(uyvy_bytes);
                 Log.d(TAG, "read file size:" + length);
-                mDisplaySurfaceView.mGlRenderer.nv21 = bytes;
-                mDisplaySurfaceView.mGlRenderer.mWidth = 1280;
-                mDisplaySurfaceView.mGlRenderer.mHeight = 720;
+                byte[] nv21_bytes = YuvUtil.UYVY_2_NV21(uyvy_bytes, 1920, 1080);
+                YuvUtil.blackening_nv12(100, 100, 300, 300, 1920, 1080, nv21_bytes);
+                mDisplaySurfaceView.mGlRenderer.nv21 = nv21_bytes;
+                mDisplaySurfaceView.mGlRenderer.mWidth = 1920;
+                mDisplaySurfaceView.mGlRenderer.mHeight = 1080;
                 mDisplaySurfaceView.requestRender();
                 fileInputStream.close();
             } catch (IOException e) {
