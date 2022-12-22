@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import android.app.AlertDialog;
+import android.os.Environment;
 import android.util.Log;
 
 import com.arcsoft.glsurfaceviewdemo.gles.DisplaySurfaceView;
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void readFile() {
         Log.e(TAG, "read file");
-        File file = new File("/sdcard/123.uyvy");
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/123.uyvy";
+        Log.d(TAG, path);
+        File file = new File(path);
         if (file.canRead()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
